@@ -16,26 +16,25 @@ app.get('/',(req,res)=>{
     res.send("Welcome to Hoody");
 })
 
-var clients = {};
+io.on('connection', function(socket){
 
-io.on("connection", (socket) => {
-    console.log("connetetd");
-    console.log(socket.id, "has joined");
-
-    socket.on("signin", (id) => {
-      console.log('Id---',id);
-      clients[id] = socket;
-      console.log('Clients---',clients);
+    console.log('User Conncetion');
+  
+    socket.on('connect user', function(user){
+      console.log("Connected user ");
+      io.emit('connect user', user);
     });
-
-    socket.on("message", (msg) => {
-      console.log('MSG----',msg);
-      let targetId = msg.targetId;
-      if (clients[targetId]){
-        clients[targetId].emit("message", msg);
-      }
+  
+    socket.on('on typing', function(typing){
+      console.log("Typing.... ");
+      io.emit('on typing', typing);
     });
-});
+  
+    socket.on('chat message', function(msg){
+      console.log("Message " + msg['message']);
+      io.emit('chat message', msg);
+    });
+  });
 
 const port = process.env.PORT || 5000;
 
