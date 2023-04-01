@@ -58,6 +58,7 @@ exports.updateProfile = async(req,res)=>{
         await user.save(async(err,response)=>{
             if (err) res.status(400).json({status:false,message: 'couldn\'t save'})
             else{ res.status(200).json({'status':true,'message':'Profile updated',profile:authResp})}
+            
         })
     }else{
         res.status(404).json({status:false,message:'User not found!'});
